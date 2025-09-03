@@ -17,18 +17,20 @@ int main() {
 
     vector<int> distances(n, INT_MAX);
 
-    priority_queue<int> pq;
-    pq.push(0);
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    pq.push({0, 0});
     distances[0] = 0;
 
     while (!pq.empty()) {
-        int current = pq.top();
+        auto [priority, current] = pq.top();
         pq.pop();
+
+        if (priority > distances[current]) continue;
 
         for (auto [next, weight] : adjacencyList[current]) {
             if (distances[current] + weight < distances[next]) {
                 distances[next] = distances[current] + weight;
-                pq.push(next);
+                pq.push({distances[next], next});
             }
         }
     }
